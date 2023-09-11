@@ -32,5 +32,14 @@ void runShell(void);
  */
 void customPrint(char *str);
 
+/**
+ * findExecutable - Find the full path of the executable based on PATH.
+ *
+ * @command: The command to find.
+ *
+ * Return: Full path to the executable, or NULL if not found.
+ */
+char* findExecutable(char *command);
+
 #endif /* MAIN_H */
 
