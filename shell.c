@@ -21,6 +21,11 @@ int readInput(char input[], size_t *input_length)
 	/* Read user input */
 	if (fgets(input, MAX_INPUT_LENGTH, stdin) == NULL)
 	{
+		if (feof(stdin))
+		{
+			/* End of file (Ctrl+D) detected, exit gracefully */
+			exit(EXIT_SUCCESS);
+		}
 		perror("Error reading input");
 		return (-1);
 	}
