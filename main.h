@@ -2,6 +2,7 @@
 #define MAIN_H
 
 #include <stddef.h>
+#include <unistd.h>
 
 /**
  * readInput - Read user input.
@@ -11,14 +12,14 @@
  *
  * Return: 0 on success, -1 on failure.
  */
-int readInput(char input[], size_t *input_length);
+int readInput(char input[], size_t* input_length);
 
 /**
  * executeCommand - Execute a command in the child process.
  *
  * @input: The user input containing the command.
  */
-void executeCommand(char *input);
+void executeCommand(char* input);
 
 /**
  * runShell - Run a simple shell program.
@@ -30,16 +31,39 @@ void runShell(void);
  *
  * @str: The string to print.
  */
-void customPrint(char *str);
+void customPrint(char* str);
 
 /**
- * findExecutable - Find the full path of the executable based on PATH.
- *
- * @command: The command to find.
- *
- * Return: Full path to the executable, or NULL if not found.
+ * handleExit - Handle the "exit" command.
  */
-char* findExecutable(char *command);
+void handleExit(void);
+
+/**
+ * handleChildProcess - Handle the logic in the child process.
+ *
+ * @input: The user input.
+ */
+void handleChildProcess(char* input);
+
+/**
+ * handleParentProcess - Handle the logic in the parent process.
+ *
+ * @child_pid: The child process ID.
+ */
+void handleParentProcess(pid_t child_pid);
+
+/**
+ * handleExit - Handle the "exit" command.
+ */
+void handleExit(void);
+
+/**
+ * handleEnv - Handle the "env" command to print the current environment.
+ */
+void handleEnv(void);
+
+/* Declare the external variable environ */
+extern char **environ;
 
 #endif /* MAIN_H */
 

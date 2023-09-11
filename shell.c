@@ -8,16 +8,6 @@
 
 #define MAX_INPUT_LENGTH 100
 
-#include "main.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
-
-#define MAX_INPUT_LENGTH 100
-
 /**
  * readInput - Read user input.
  *
@@ -73,8 +63,7 @@ char *findExecutable(char *command)
 	token = strtok(path_copy, ":");
 	while (token != NULL)
 	{
-		char *full_path =
-		    (char *)malloc(strlen(token) + strlen(command) + 2);
+		char *full_path = (char *)malloc(strlen(token) + strlen(command) + 2);
 
 		if (full_path == NULL)
 		{
@@ -99,48 +88,6 @@ char *findExecutable(char *command)
 }
 
 /**
- * executeCommand - Execute a command in the child process.
- *
- * @input: The user input containing the command.
- */
-void executeCommand(char *input)
-{
-	/* Parse the command and arguments */
-	char *args[MAX_INPUT_LENGTH / 2];
-	char *token = strtok(input, " ");
-	char *full_path;
-
-	int i = 0;
-
-	while (token != NULL)
-	{
-		args[i++] = token;
-		token = strtok(NULL, " ");
-	}
-	args[i] = NULL;
-
-	/* Find the full path of the executable */
-	full_path = findExecutable(args[0]);
-	if (full_path == NULL)
-	{
-		customPrint("Command not found: ");
-		customPrint(args[0]);
-		customPrint("\n");
-		exit(EXIT_FAILURE);
-	}
-
-	/* Execute the command */
-	if (execv(full_path, args) == -1)
-	{
-		perror("Error executing command");
-		free(full_path);
-		exit(EXIT_FAILURE);
-	}
-
-	free(full_path);
-}
-
-/**
  * runShell - Run a simple shell program.
  */
 void runShell(void)
@@ -158,6 +105,10 @@ void runShell(void)
 		if (readInput(input, &input_length) == -1)
 			exit(EXIT_FAILURE);
 
+		/* Check if the user entered "exit" */
+		if (strcmp(input, "exit") == 0)
+			handleExit();
+
 		/* Fork a child process */
 		child_pid = fork();
 
@@ -168,22 +119,15 @@ void runShell(void)
 		}
 
 		if (child_pid == 0)
-			executeCommand(input);
+		{
+			/* Child process */
+			handleChildProcess(input);
+		}
 		else
 		{
 			/* Parent process */
-			int status;
-
-			wait(&status);
-			if (WIFEXITED(status))
-			{
-				customPrint("Child process exited with status ");
-				customPrint("\n");
-			}
-			else
-				customPrint("Child process did not exit normally\n");
+			handleParentProcess(child_pid);
 		}
 	}
 }
-
 
