@@ -19,7 +19,7 @@ char *my_getline(void)
 
 	while (1)
 	{
-		ssize_t i, bytes_read = read(STDIN_FILENO, buffer, BUFFER_SIZE);
+		ssize_t bytes_read = read(STDIN_FILENO, buffer, BUFFER_SIZE), i;
 
 		if (bytes_read <= 0)
 		{
@@ -33,7 +33,7 @@ char *my_getline(void)
 
 			if (current_char == '\n')
 			{
-				line = realloc(line, line_size + 1); /* Fnd a newline,extract the line */
+				line = realloc(line, line_size + 1);
 				if (!line)
 				{
 					perror("Memory allocation error");
@@ -42,7 +42,7 @@ char *my_getline(void)
 				line[line_size] = '\0';
 				return (line);
 			}
-			line = realloc(line, line_size + 2); /* Append the character to the line */
+			line = realloc(line, line_size + 2);
 			if (!line)
 			{
 				perror("Memory allocation error");
@@ -54,4 +54,5 @@ char *my_getline(void)
 		}
 	}
 }
+
 
