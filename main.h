@@ -12,14 +12,14 @@
  *
  * Return: 0 on success, -1 on failure.
  */
-int readInput(char input[], size_t* input_length);
+int readInput(char input[], size_t *input_length);
 
 /**
  * executeCommand - Execute a command in the child process.
  *
  * @input: The user input containing the command.
  */
-void executeCommand(char* input);
+void executeCommand(char *input);
 
 /**
  * runShell - Run a simple shell program.
@@ -31,7 +31,7 @@ void runShell(void);
  *
  * @str: The string to print.
  */
-void customPrint(char* str);
+void customPrint(char *str);
 
 /**
  * handleExit - Handle the "exit" command.
@@ -43,7 +43,7 @@ void handleExit(void);
  *
  * @input: The user input.
  */
-void handleChildProcess(char* input);
+void handleChildProcess(char *input);
 
 /**
  * handleParentProcess - Handle the logic in the parent process.
@@ -64,6 +64,14 @@ void handleEnv(void);
 
 /* Declare the external variable environ */
 extern char **environ;
+
+/**
+ * my_getline - Custom getline function for reading user input.
+ *
+ * Return: A dynamically allocated line of input, or NULL on error or end of
+ * input. It is the caller's responsibility to free the allocated memory.
+ */
+char *my_getline(void);
 
 #endif /* MAIN_H */
 
