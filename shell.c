@@ -18,25 +18,24 @@
  */
 int readInput(char input[], size_t *input_length)
 {
-	/* Read user input */
-	if (fgets(input, MAX_INPUT_LENGTH, stdin) == NULL)
+	/* Read user input using custom my_getline function */
+	char *line = my_getline();
+
+	if (line == NULL)
 	{
-		if (feof(stdin))
-		{
-			/* End of file (Ctrl+D) detected, exit gracefully */
-			exit(EXIT_SUCCESS);
-		}
-		perror("Error reading input");
-		return (-1);
+		/* End of input or error, exit gracefully */
+		exit(EXIT_SUCCESS);
 	}
 
-	/* Remove trailing newline character, if present */
+	/* Copy the line into the input buffer */
+	strncpy(input, line, MAX_INPUT_LENGTH);
+	input[MAX_INPUT_LENGTH - 1] = '\0';
+
+	/* Calculate the length of the input */
 	*input_length = strlen(input);
-	if (*input_length > 0 && input[*input_length - 1] == '\n')
-	{
-		input[*input_length - 1] = '\0';
-		(*input_length)--;
-	}
+
+	/* Free the allocated memory for the line */
+	free(line);
 
 	return (0);
 }
