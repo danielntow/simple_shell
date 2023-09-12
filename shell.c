@@ -98,19 +98,24 @@ void runShell(void)
 		size_t input_length;
 		pid_t child_pid;
 
-		/* Display a prompt with $ */
-		customPrint("$ ");
+		customPrint("$ "); /* Display a prompt with $ */
 
 		/* Read user input */
 		if (readInput(input, &input_length) == -1)
 			exit(EXIT_FAILURE);
 
-		/* Check if the user entered "exit" */
-		if (strcmp(input, "exit") == 0)
-			handleExit();
+		/* Check if the user entered "exit" with a status argument */
+		if (strncmp(input, "exit", 4) == 0)
+		{
+			/* Attempt to parse the status argument */
+			int status = 0;
 
-		/* Fork a child process */
-		child_pid = fork();
+			if (sscanf(input + 4, " %d", &status) == 1)
+				handleExit(status);
+			else
+				handleExit(0); /* No valid status argument provided, exit with status 0 */
+		}
+		child_pid = fork(); /* Fork a child process */
 
 		if (child_pid == -1)
 		{
@@ -119,15 +124,12 @@ void runShell(void)
 		}
 
 		if (child_pid == 0)
-		{
-			/* Child process */
-			handleChildProcess(input);
-		}
+
+			handleChildProcess(input); /* Child process */
 		else
-		{
-			/* Parent process */
-			handleParentProcess(child_pid);
-		}
+			handleParentProcess(child_pid); /* Parent process */
+
 	}
 }
+
 

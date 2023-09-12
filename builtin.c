@@ -7,10 +7,16 @@
 #include <unistd.h>
 
 #define MAX_INPUT_LENGTH 100
+
 /**
- * handleExit - Handle the "exit" command.
+ * handleExit - Handle the "exit" command with an optional status.
+ *
+ * @status: The exit status (an integer) to exit the shell.
  */
-void handleExit(void) { exit(EXIT_SUCCESS); }
+void handleExit(int status)
+{
+	exit(status);
+}
 
 /**
  * handleEnv - Handle the "env" command to print the current environment.

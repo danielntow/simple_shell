@@ -34,9 +34,11 @@ void runShell(void);
 void customPrint(char *str);
 
 /**
- * handleExit - Handle the "exit" command.
+ * handleExit - Handle the "exit" command with an optional status.
+ *
+ * @status: The exit status (an integer) to exit the shell.
  */
-void handleExit(void);
+void handleExit(int status);
 
 /**
  * handleChildProcess - Handle the logic in the child process.
@@ -53,9 +55,11 @@ void handleChildProcess(char *input);
 void handleParentProcess(pid_t child_pid);
 
 /**
- * handleExit - Handle the "exit" command.
+ * handleExit - Handle the "exit" command with an optional status.
+ *
+ * @status: The exit status (an integer) to exit the shell.
  */
-void handleExit(void);
+void handleExit(int status);
 
 /**
  * handleEnv - Handle the "env" command to print the current environment.
