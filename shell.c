@@ -59,7 +59,8 @@ char *findExecutable(char *command)
 		exit(EXIT_FAILURE);
 	}
 
-	token = strtok(path_copy, ":");
+	/* can use this func: token = strtok(path_copy, ":"); */
+	token = customTokenize(path_copy, ":", NULL);
 	while (token != NULL)
 	{
 		char *full_path = (char *)malloc(strlen(token) + strlen(command) + 2);
@@ -79,7 +80,7 @@ char *findExecutable(char *command)
 		}
 
 		free(full_path);
-		token = strtok(NULL, ":");
+		token = customTokenize(path_copy, ":", NULL);
 	}
 
 	free(path_copy);

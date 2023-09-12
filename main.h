@@ -73,5 +73,7 @@ extern char **environ;
  */
 char *my_getline(void);
 
+char *customTokenize(char *str, const char *delim, char **saveptr);
+
 #endif /* MAIN_H */
 
