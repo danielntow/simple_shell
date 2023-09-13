@@ -1,5 +1,7 @@
 # Simple Shell
 
+![Alt text](image.png)
+
 Simple Shell is a basic UNIX command-line interpreter written in C. It is designed to emulate some of the functionality of the standard UNIX shell (/bin/sh). This project is part of a learning process and aims to explore the fundamentals of operating systems and system calls.
 
 ## Learning Objectives
