@@ -82,8 +82,14 @@ char *customTokenize(char *str, const char *delim, char **saveptr);
 /* Function prototypes for handle_env_variable.c */
 void handleUnsetenv(char *variable);
 void handleSetenv(char *variable, char *value);
-void handleSetenvCommand(char* input);
-void handleUnsetenvCommand(char* input);
+void handleSetenvCommand(char *input);
+void handleUnsetenvCommand(char *input);
+
+/* handle cd cmd */
+void changeToHomeDirectory(void);
+void changeToPreviousDirectory(void);
+void changeToDirectory(const char *directory);
+void handleCdCommand(char *input);
 
 #endif /* MAIN_H */
 
