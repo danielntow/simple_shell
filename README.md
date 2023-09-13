@@ -1,4 +1,3 @@
-# simple_shell
 # Simple Shell
 
 Simple Shell is a basic UNIX command-line interpreter written in C. It is designed to emulate some of the functionality of the standard UNIX shell (/bin/sh). This project is part of a learning process and aims to explore the fundamentals of operating systems and system calls.
@@ -116,6 +115,8 @@ To use this shell, compile the source code and run the resulting executable:
 ```bash
 gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
 ./hsh
+
+
 
 ##Contributors
 PRINCE OFOSU
