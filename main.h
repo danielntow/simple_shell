@@ -2,6 +2,7 @@
 #define MAIN_H
 
 #include <stddef.h>
+#include <unistd.h>
 
 /**
  * readInput - Read user input.
@@ -33,13 +34,62 @@ void runShell(void);
 void customPrint(char *str);
 
 /**
- * findExecutable - Find the full path of the executable based on PATH.
+ * handleExit - Handle the "exit" command with an optional status.
  *
- * @command: The command to find.
- *
- * Return: Full path to the executable, or NULL if not found.
+ * @status: The exit status (an integer) to exit the shell.
  */
-char* findExecutable(char *command);
+void handleExit(int status);
+
+/**
+ * handleChildProcess - Handle the logic in the child process.
+ *
+ * @input: The user input.
+ */
+void handleChildProcess(char *input);
+
+/**
+ * handleParentProcess - Handle the logic in the parent process.
+ *
+ * @child_pid: The child process ID.
+ */
+void handleParentProcess(pid_t child_pid);
+
+/**
+ * handleExit - Handle the "exit" command with an optional status.
+ *
+ * @status: The exit status (an integer) to exit the shell.
+ */
+void handleExit(int status);
+
+/**
+ * handleEnv - Handle the "env" command to print the current environment.
+ */
+void handleEnv(void);
+
+/* Declare the external variable environ */
+extern char **environ;
+
+/**
+ * my_getline - Custom getline function for reading user input.
+ *
+ * Return: A dynamically allocated line of input, or NULL on error or end of
+ * input. It is the caller's responsibility to free the allocated memory.
+ */
+char *my_getline(void);
+
+char *customTokenize(char *str, const char *delim, char **saveptr);
+
+/* Function prototypes for handle_env_variable.c */
+void handleUnsetenv(char *variable);
+void handleSetenv(char *variable, char *value);
+void handleSetenvCommand(char *input);
+void handleUnsetenvCommand(char *input);
+
+/* handle cd cmd */
+void changeToHomeDirectory(void);
+void changeToPreviousDirectory(void);
+void changeToDirectory(const char *directory);
+void handleCdCommand(char *input);
 
 #endif /* MAIN_H */
 

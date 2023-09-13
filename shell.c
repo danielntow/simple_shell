@@ -8,16 +8,6 @@
 
 #define MAX_INPUT_LENGTH 100
 
-#include "main.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
-
-#define MAX_INPUT_LENGTH 100
-
 /**
  * readInput - Read user input.
  *
@@ -28,25 +18,24 @@
  */
 int readInput(char input[], size_t *input_length)
 {
-	/* Read user input */
-	if (fgets(input, MAX_INPUT_LENGTH, stdin) == NULL)
+	/* Read user input using custom my_getline function */
+	char *line = my_getline();
+
+	if (line == NULL)
 	{
-		if (feof(stdin))
-		{
-			/* End of file (Ctrl+D) detected, exit gracefully */
-			exit(EXIT_SUCCESS);
-		}
-		perror("Error reading input");
-		return (-1);
+		/* End of input or error, exit gracefully */
+		exit(EXIT_SUCCESS);
 	}
 
-	/* Remove trailing newline character, if present */
+	/* Copy the line into the input buffer */
+	strncpy(input, line, MAX_INPUT_LENGTH);
+	input[MAX_INPUT_LENGTH - 1] = '\0';
+
+	/* Calculate the length of the input */
 	*input_length = strlen(input);
-	if (*input_length > 0 && input[*input_length - 1] == '\n')
-	{
-		input[*input_length - 1] = '\0';
-		(*input_length)--;
-	}
+
+	/* Free the allocated memory for the line */
+	free(line);
 
 	return (0);
 }
@@ -70,11 +59,11 @@ char *findExecutable(char *command)
 		exit(EXIT_FAILURE);
 	}
 
-	token = strtok(path_copy, ":");
+	/* can use this func: token = strtok(path_copy, ":"); */
+	token = customTokenize(path_copy, ":", NULL);
 	while (token != NULL)
 	{
-		char *full_path =
-		    (char *)malloc(strlen(token) + strlen(command) + 2);
+		char *full_path = (char *)malloc(strlen(token) + strlen(command) + 2);
 
 		if (full_path == NULL)
 		{
@@ -91,53 +80,11 @@ char *findExecutable(char *command)
 		}
 
 		free(full_path);
-		token = strtok(NULL, ":");
+		token = customTokenize(path_copy, ":", NULL);
 	}
 
 	free(path_copy);
 	return (NULL);
-}
-
-/**
- * executeCommand - Execute a command in the child process.
- *
- * @input: The user input containing the command.
- */
-void executeCommand(char *input)
-{
-	/* Parse the command and arguments */
-	char *args[MAX_INPUT_LENGTH / 2];
-	char *token = strtok(input, " ");
-	char *full_path;
-
-	int i = 0;
-
-	while (token != NULL)
-	{
-		args[i++] = token;
-		token = strtok(NULL, " ");
-	}
-	args[i] = NULL;
-
-	/* Find the full path of the executable */
-	full_path = findExecutable(args[0]);
-	if (full_path == NULL)
-	{
-		customPrint("Command not found: ");
-		customPrint(args[0]);
-		customPrint("\n");
-		exit(EXIT_FAILURE);
-	}
-
-	/* Execute the command */
-	if (execv(full_path, args) == -1)
-	{
-		perror("Error executing command");
-		free(full_path);
-		exit(EXIT_FAILURE);
-	}
-
-	free(full_path);
 }
 
 /**
@@ -151,37 +98,38 @@ void runShell(void)
 		size_t input_length;
 		pid_t child_pid;
 
-		/* Display a prompt with $ */
-		customPrint("$ ");
-
+		customPrint("$ "); /* Display a prompt with $ */
 		/* Read user input */
 		if (readInput(input, &input_length) == -1)
 			exit(EXIT_FAILURE);
-
-		/* Fork a child process */
-		child_pid = fork();
-
-		if (child_pid == -1)
+		/* Check if the user entered "exit" with a status argument */
+		if (strncmp(input, "exit", 4) == 0) /* Attempt tp parse the status arg */
 		{
-			perror("Error forking");
-			exit(EXIT_FAILURE);
-		}
+			int status = 0;
 
-		if (child_pid == 0)
-			executeCommand(input);
+			if (sscanf(input + 4, " %d", &status) == 1)
+				handleExit(status);
+			else
+				handleExit(0); /* No valid status argument provided, exit with statis 0 */
+		}
+		else if (strncmp(input, "setenv", 6) == 0)
+			handleSetenvCommand(input); /* Handle the "setenv" command */
+		else if (strncmp(input, "unsetenv", 8) == 0)
+			handleUnsetenvCommand(input); /* Handle the "unsetenv" command */
+		else if (strncmp(input, "cd", 2) == 0) /* handle cd cmd*/
+			handleCdCommand(input);
 		else
 		{
-			/* Parent process */
-			int status;
-
-			wait(&status);
-			if (WIFEXITED(status))
+			child_pid = fork(); /* Fork a child process */
+			if (child_pid == -1)
 			{
-				customPrint("Child process exited with status ");
-				customPrint("\n");
+				perror("Error forking");
+				exit(EXIT_FAILURE);
 			}
+			if (child_pid == 0)
+				handleChildProcess(input); /* Child process */
 			else
-				customPrint("Child process did not exit normally\n");
+				handleParentProcess(child_pid); /* Parent process */
 		}
 	}
 }
