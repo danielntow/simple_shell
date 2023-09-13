@@ -79,5 +79,11 @@ char *my_getline(void);
 
 char *customTokenize(char *str, const char *delim, char **saveptr);
 
+/* Function prototypes for handle_env_variable.c */
+void handleUnsetenv(char *variable);
+void handleSetenv(char *variable, char *value);
+void handleSetenvCommand(char* input);
+void handleUnsetenvCommand(char* input);
+
 #endif /* MAIN_H */
 

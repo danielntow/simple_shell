@@ -103,7 +103,6 @@ void runShell(void)
 		/* Read user input */
 		if (readInput(input, &input_length) == -1)
 			exit(EXIT_FAILURE);
-
 		/* Check if the user entered "exit" with a status argument */
 		if (strncmp(input, "exit", 4) == 0)
 		{
@@ -113,22 +112,25 @@ void runShell(void)
 			if (sscanf(input + 4, " %d", &status) == 1)
 				handleExit(status);
 			else
-				handleExit(0); /* No valid status argument provided, exit with status 0 */
+				handleExit(0); /* No valid status argument provided, exit with statis 0 */
 		}
-		child_pid = fork(); /* Fork a child process */
-
-		if (child_pid == -1)
-		{
-			perror("Error forking");
-			exit(EXIT_FAILURE);
-		}
-
-		if (child_pid == 0)
-
-			handleChildProcess(input); /* Child process */
+		else if (strncmp(input, "setenv", 6) == 0)
+			handleSetenvCommand(input); /* Handle the "setenv" command */
+		else if (strncmp(input, "unsetenv", 8) == 0)
+			handleUnsetenvCommand(input); /* Handle the "unsetenv" command */
 		else
-			handleParentProcess(child_pid); /* Parent process */
-
+		{
+			child_pid = fork(); /* Fork a child process */
+			if (child_pid == -1)
+			{
+				perror("Error forking");
+				exit(EXIT_FAILURE);
+			}
+			if (child_pid == 0)
+				handleChildProcess(input); /* Child process */
+			else
+				handleParentProcess(child_pid); /* Parent process */
+		}
 	}
 }
 
