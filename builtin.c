@@ -97,4 +97,3 @@ void executeCommand(char *input)
 		exit(EXIT_FAILURE);
 	}
 }
-
