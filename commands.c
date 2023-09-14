@@ -5,7 +5,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-
 #define MAX_INPUT_LENGTH 100
 
 /**
@@ -17,42 +16,42 @@
  */
 char *findExecutable(char *command)
 {
-	char *path = getenv("PATH");
-	char *path_copy = strdup(path);
-	char *token;
+    char *path = getenv("PATH");
+    char *path_copy = strdup(path);
+    char *token;
 
-	if (path_copy == NULL)
-	{
-		perror("Error duplicating PATH");
-		exit(EXIT_FAILURE);
-	}
+    if (path_copy == NULL)
+    {
+        perror("Error duplicating PATH");
+        exit(EXIT_FAILURE);
+    }
 
-	/* can use this func: token = strtok(path_copy, ":"); */
-	token = customTokenize(path_copy, ":", NULL);
-	while (token != NULL)
-	{
-		char *full_path = (char *)malloc(strlen(token) + strlen(command) + 2);
+    /* can use this func: token = strtok(path_copy, ":"); */
+    token = customTokenize(path_copy, ":", NULL);
+    while (token != NULL)
+    {
+        char *full_path = (char *)malloc(strlen(token) + strlen(command) + 2);
 
-		if (full_path == NULL)
-		{
-			perror("Error allocating memory");
-			free(path_copy);
-			exit(EXIT_FAILURE);
-		}
+        if (full_path == NULL)
+        {
+            perror("Error allocating memory");
+            free(path_copy);
+            exit(EXIT_FAILURE);
+        }
 
-		sprintf(full_path, "%s/%s", token, command);
-		if (access(full_path, X_OK) == 0)
-		{
-			free(path_copy);
-			return (full_path);
-		}
+        sprintf(full_path, "%s/%s", token, command);
+        if (access(full_path, X_OK) == 0)
+        {
+            free(path_copy);
+            return (full_path);
+        }
 
-		free(full_path);
-		token = customTokenize(path_copy, ":", NULL);
-	}
+        free(full_path);
+        token = customTokenize(path_copy, ":", NULL);
+    }
 
-	free(path_copy);
-	return (NULL);
+    free(path_copy);
+    return (NULL);
 }
 
 /**
@@ -64,15 +63,15 @@ char *findExecutable(char *command)
  */
 void tokenizeInput(char *input, char *commands[], size_t *num_commands)
 {
-	char *token;
-	*num_commands = 0;
-	token = strtok(input, ";");
+    char *token;
+    *num_commands = 0;
+    token = strtok(input, ";");
 
-	while (token != NULL && *num_commands < (MAX_INPUT_LENGTH / 2))
-	{
-		commands[(*num_commands)++] = token;
-		token = strtok(NULL, ";");
-	}
+    while (token != NULL && *num_commands < (MAX_INPUT_LENGTH / 2))
+    {
+        commands[(*num_commands)++] = token;
+        token = strtok(NULL, ";");
+    }
 }
 
 /**
@@ -83,45 +82,45 @@ void tokenizeInput(char *input, char *commands[], size_t *num_commands)
  */
 void executeCommands(char *commands[], size_t num_commands)
 {
-	size_t i;
+    size_t i;
 
-	for (i = 0; i < num_commands; i++)
-	{
-		char *command = commands[i];
+    for (i = 0; i < num_commands; i++)
+    {
+        char *command = commands[i];
 
-		if (strncmp(command, "exit", 4) == 0)
-		{
-			int status = 0;
+        if (strncmp(command, "exit", 4) == 0)
+        {
+            int status = 0;
 
-			if (sscanf(command + 4, " %d", &status) == 1)
-				handleExit(status);
-			else
-				handleExit(0);
-		}
-		else if (strncmp(command, "setenv", 6) == 0)
-			handleSetenvCommand(command);
-		else if (strncmp(command, "unsetenv", 8) == 0)
-			handleUnsetenvCommand(command);
-		else if (strncmp(command, "cd", 2) == 0)
-			handleCdCommand(command);
-		else
-		{
-			pid_t child_pid = fork();
+            if (sscanf(command + 4, " %d", &status) == 1)
+                handleExit(status);
+            else
+                handleExit(0);
+        }
+        else if (strncmp(command, "setenv", 6) == 0)
+            handleSetenvCommand(command);
+        else if (strncmp(command, "unsetenv", 8) == 0)
+            handleUnsetenvCommand(command);
+        else if (strncmp(command, "cd", 2) == 0)
+            handleCdCommand(command);
+        else
+        {
+            pid_t child_pid = fork();
 
-			if (child_pid == -1)
-			{
-				perror("Error forking");
-				exit(EXIT_FAILURE);
-			}
-			if (child_pid == 0)
-			{
-				handleChildProcess(command);
-				exit(EXIT_SUCCESS);
-			}
-			else
-				handleParentProcess(child_pid);
-		}
-	}
+            if (child_pid == -1)
+            {
+                perror("Error forking");
+                exit(EXIT_FAILURE);
+            }
+            if (child_pid == 0)
+            {
+                handleChildProcess(command);
+                exit(EXIT_SUCCESS);
+            }
+            else
+                handleParentProcess(child_pid);
+        }
+    }
 }
 
 /**
@@ -132,15 +131,10 @@ void executeCommands(char *commands[], size_t num_commands)
  */
 void processCommands(char *input)
 {
-	char *commands[MAX_INPUT_LENGTH / 2];
-	size_t num_commands = 0;
+    char *commands[MAX_INPUT_LENGTH / 2];
+    size_t num_commands = 0;
 
-	tokenizeInput(input, commands, &num_commands);
+    tokenizeInput(input, commands, &num_commands);
 
-	executeCommands(commands, num_commands);
+    executeCommands(commands, num_commands);
 }
-
-
-
-
-
