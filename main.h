@@ -92,9 +92,16 @@ void changeToDirectory(const char *directory);
 void handleCdCommand(char *input);
 
 char *findExecutable(char *command);
+
 /* handling commands separated by semicolons */
-void tokenizeInput(char input, char commands[], size_t *num_commands);
+void tokenizeInput(char *input, char *commands[], size_t *num_commands);
 void processCommands(char *input);
-void executeCommands(char *commands[], size_t num_commands);
+/**
+ * executeCommands - Execute multiple commands in sequence.
+ *
+ * @commands: An array of commands to execute.
+ * @num_commands: The number of commands in the array.
+ */
+void executeCommands(char *commands[], size_t num_commands);
 
 #endif /* MAIN_H */
