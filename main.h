@@ -91,5 +91,6 @@ void changeToPreviousDirectory(void);
 void changeToDirectory(const char *directory);
 void handleCdCommand(char *input);
 
-#endif /* MAIN_H */
+char *findExecutable(char *command);
 
+#endif /* MAIN_H */
