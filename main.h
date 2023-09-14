@@ -94,5 +94,6 @@ void handleCdCommand(char *input);
 char *findExecutable(char *command);
 /* handling commands separated by semicolons */
 void tokenizeInput(char input, char commands[], size_t *num_commands);
+void processCommands(char *input);
 
 #endif /* MAIN_H */
