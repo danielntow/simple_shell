@@ -19,6 +19,7 @@
  *
  * Return: 0 on success, -1 on failure.
  */
+
 int readInput(char input[], size_t *input_length)
 {
     /* Read user input using custom my_getline function */
@@ -49,6 +50,7 @@ int readInput(char input[], size_t *input_length)
  * Return: A dynamically allocated line of input, or NULL on error or end of
  * input. It is the caller's responsibility to free the allocated memory.
  */
+
 char *my_getline(void)
 {
     static char buffer[BUFFER_SIZE];

@@ -6,6 +6,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #define MAX_INPUT_LENGTH 100
+
 /**
  * findExecutable - Find the full path of the executable based on PATH.
  *
@@ -13,6 +14,7 @@
  *
  * Return: Full path to the executable, or NULL if not found.
  */
+
 char *findExecutable(char *command)
 {
     char *path = getenv("PATH");
@@ -46,6 +48,7 @@ char *findExecutable(char *command)
     free(path_copy);
     return (NULL);
 }
+
 /**
  * tokenizeInput - Tokenize a string of commands separated by semicolons.
  *
@@ -53,6 +56,7 @@ char *findExecutable(char *command)
  * @commands: An array to store the individual commands.
  * @num_commands: Pointer to the number of commands found.
  */
+
 void tokenizeInput(char *input, char *commands[], size_t *num_commands)
 {
     char *token;
@@ -64,12 +68,14 @@ void tokenizeInput(char *input, char *commands[], size_t *num_commands)
         token = strtok(NULL, ";");
     }
 }
+
 /**
  * executeCommands - Execute multiple commands in sequence.
  *
  * @commands: An array of commands to execute.
  * @num_commands: The number of commands in the array.
  */
+
 void executeCommands(char *commands[], size_t num_commands)
 {
     size_t i;
@@ -108,12 +114,14 @@ void executeCommands(char *commands[], size_t num_commands)
         }
     }
 }
+
 /**
  * processCommands - Process and execute multiple commands separated by
  * semicolons.
  *
  * @input: The input string containing multiple commands.
  */
+
 void processCommands(char *input)
 {
     char *commands[MAX_INPUT_LENGTH / 2];
