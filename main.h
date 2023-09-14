@@ -95,5 +95,6 @@ char *findExecutable(char *command);
 /* handling commands separated by semicolons */
 void tokenizeInput(char input, char commands[], size_t *num_commands);
 void processCommands(char *input);
+void executeCommands(char *commands[], size_t num_commands);
 
 #endif /* MAIN_H */
