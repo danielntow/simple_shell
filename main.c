@@ -43,7 +43,6 @@ int main(void)
 		}
 
 		execute_command(input);
-			execute_command(input);
 	}
 
 	return (0);
