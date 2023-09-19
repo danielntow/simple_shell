@@ -81,6 +81,8 @@ void executeCommand(char *input)
 	/* Parse the command and arguments */
 	char *args[MAX_INPUT_LENGTH / 2];
 	char *token = strtok(input, " ");
+	char *full_path;
+
 	int i = 0;
 
 	while (token != NULL)
@@ -90,10 +92,23 @@ void executeCommand(char *input)
 	}
 	args[i] = NULL;
 
-	/* Execute the command */
-	if (execvp(args[0], args) == -1)
+	/* Find the full path of the executable */
+	full_path = findExecutable(args[0]);
+	if (full_path == NULL)
 	{
-		perror("Error executing command");
+		customPrint("Command not found: ");
+		customPrint(args[0]);
+		customPrint("\n");
 		exit(EXIT_FAILURE);
 	}
+
+	/* Execute the command using execve */
+	if (execve(full_path, args, environ) == -1)
+	{
+		perror("Error executing command");
+		free(full_path);
+		exit(EXIT_FAILURE);
+	}
+
+	free(full_path);
 }
