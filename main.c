@@ -35,22 +35,14 @@ int main(void)
 		}
 		else if (strncmp(input, "exit ", 5) == 0)
 		{
-			/* Check if the input starts with "exit " */
-			int status_code;
+			/* Handle exit with status code */
+			int status_code = atoi(input + 5);
 
-			if (sscanf(input + 5, "%d", &status_code) == 1)
-			{
-				/* If a valid integer follows "exit ", set the */
-				/* status code and exit */
-				exit(status_code);
-			}
-			else
-			{
-				/* Invalid input after "exit " */
-				printf("Invalid exit command format.\n");
-			}
+			printf("Exiting the shell with status code: %d\n", status_code);
+			exit(status_code);
 		}
-		else
+
+		execute_command(input);
 			execute_command(input);
 	}
 
