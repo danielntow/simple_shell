@@ -91,11 +91,11 @@ void changeToPreviousDirectory(void);
 void changeToDirectory(const char *directory);
 void handleCdCommand(char *input);
 
-char* findExecutable(char *command);
+char *findExecutable(char *command);
 
 /* handling commands separated by semicolons */
 void tokenizeInput(char *input, char *commands[], size_t *num_commands);
-void processCommands(char* input);
+void processCommands(char *input);
 /**
  * executeCommands - Execute multiple commands in sequence.
  *
