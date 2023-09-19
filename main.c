@@ -7,24 +7,17 @@
 
 #define BUFFER_SIZE 1024
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
 
-#define BUFFER_SIZE 1024
 
 void execute_command(const char *command);
 
 /**
-* main - Entry point of the shell program.
-*
-* Description: Reads user input, executes commands, and exits o"exit" command.
-*
-* Return: Always returns 0.
-*/
+ * main - Entry point of the shell program.
+ *
+ * Description: Reads user input, executes commands, and exits o"exit" command.
+ *
+ * Return: Always returns 0.
+ */
 int main(void)
 {
 char input[BUFFER_SIZE];
@@ -56,13 +49,13 @@ return (0);
 #include <unistd.h>
 
 /**
-* execute_command - Execute a given command.
-*
-* @command: The command to execute.
-*
-* Description: Forks a child process to execute the command and waits for it to
-* complete.
-*/
+ * execute_command - Execute a given command.
+ *
+ * @command: The command to execute.
+ *
+ * Description: Forks a child process to execute the commandand waits for it to
+ * complete.
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -71,12 +64,12 @@ return (0);
 #include <unistd.h>
 
 /**
-* execute_command - Execute a given command.
-*
-* @command: The command to execute.
-*
-* Description: Forks a child process to execute the command
-*/
+ * execute_command - Execute a given command.
+ *
+ * @command: The command to execute.
+ *
+ * Description: Forks a child process to execute the command
+ */
 void execute_command(const char *command)
 {
 pid_t pid = fork();
