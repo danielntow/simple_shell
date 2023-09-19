@@ -33,14 +33,22 @@ int main(void)
 			printf("Exiting the shell...\n");
 			break;
 		}
-		else if (strncmp(input, "exit", 4) == 0)
+		else if (strncmp(input, "exit ", 5) == 0)
 		{
-			int status = 0;
+			/* Check if the input starts with "exit " */
+			int status_code;
 
-			if (sscanf(input + 4, " %d", &status) == 1)
-				handleExit(status);
+			if (sscanf(input + 5, "%d", &status_code) == 1)
+			{
+				/* If a valid integer follows "exit ", set the */
+				/* status code and exit */
+				exit(status_code);
+			}
 			else
-				handleExit(0);
+			{
+				/* Invalid input after "exit " */
+				printf("Invalid exit command format.\n");
+			}
 		}
 		else
 			execute_command(input);
