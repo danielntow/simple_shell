@@ -39,10 +39,6 @@ int main(void)
 	return (0);
 }
 
-
-
-
-
 /**
  * execute_command - Execute a given command.
  *
@@ -54,6 +50,8 @@ int main(void)
 void execute_command(const char *command)
 {
 	pid_t pid = fork();
+	char *executable, *full_path, *full_command;
+	char *env[] = {NULL};
 
 	if (pid == -1)
 	{
@@ -75,9 +73,9 @@ void execute_command(const char *command)
 		args[i] = NULL;
 
 		/* Specify the full path to the executable */
-		char *executable = args[0];
-		char *full_path = "/bin/"; /* Adjust this path as needed */
-		char *full_command =
+		executable = args[0];
+		full_path = "/bin/"; /* Adjust this path as needed */
+		full_command =
 		    malloc(strlen(full_path) + strlen(executable) + 1);
 		if (full_command == NULL)
 		{
@@ -89,7 +87,6 @@ void execute_command(const char *command)
 		strcat(full_command, executable);
 
 		/* Prepare environment variables (optional) */
-		char *env[] = {NULL};
 
 		if (execve(full_command, args, env) == -1)
 		{
@@ -107,5 +104,4 @@ void execute_command(const char *command)
 		waitpid(pid, &status, 0);
 	}
 }
-
 
