@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include "main.h"
 
 #define BUFFER_SIZE 1024
 
@@ -32,8 +33,17 @@ int main(void)
 			printf("Exiting the shell...\n");
 			break;
 		}
+		else if (strncmp(input, "exit", 4) == 0)
+		{
+			int status = 0;
 
-		execute_command(input);
+			if (sscanf(input + 4, " %d", &status) == 1)
+				handleExit(status);
+			else
+				handleExit(0);
+		}
+		else
+			execute_command(input);
 	}
 
 	return (0);
