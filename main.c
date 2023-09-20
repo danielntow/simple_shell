@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include "main.h"
+
 
 #define BUFFER_SIZE 1024
 
